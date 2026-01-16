@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Secure Document Repository Design System */
+
+@layer base {
+  :root {
+    --background: 220 20% 97%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 222 84% 20%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 215 25% 27%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 220 15% 91%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 222 84% 20%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --surface-elevated: 0 0% 100%;
+    --surface-overlay: 222 47% 11% / 0.8;
+    --gradient-primary: linear-gradient(135deg, hsl(222 84% 20%), hsl(215 25% 35%));
+    --gradient-accent: linear-gradient(135deg, hsl(199 89% 48%), hsl(199 89% 38%));
+    --gradient-secure: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 76% 26%));
+    --shadow-soft: 0 4px 6px -1px hsl(222 47% 11% / 0.05), 0 2px 4px -2px hsl(222 47% 11% / 0.05);
+    --shadow-medium: 0 10px 15px -3px hsl(222 47% 11% / 0.08), 0 4px 6px -4px hsl(222 47% 11% / 0.05);
+    --shadow-large: 0 25px 50px -12px hsl(222 47% 11% / 0.15);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222 47% 8%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 199 89% 48%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 199 89% 48%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 199 89% 48%;
+
+    --surface-elevated: 222 47% 13%;
+    --surface-overlay: 0 0% 0% / 0.8;
+    --gradient-primary: linear-gradient(135deg, hsl(199 89% 48%), hsl(199 89% 38%));
+    --shadow-soft: 0 4px 6px -1px hsl(0 0% 0% / 0.2);
+    --shadow-medium: 0 10px 15px -3px hsl(0 0% 0% / 0.25);
+    --shadow-large: 0 25px 50px -12px hsl(0 0% 0% / 0.4);
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  /* Disable text selection globally for document viewing */
+  .no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* Blur content when tab loses focus */
+  .blur-on-unfocus {
+    transition: filter 0.3s ease;
+  }
+
+  .blur-on-unfocus.is-blurred {
+    filter: blur(20px);
+  }
+
+  /* Watermark styling */
+  .watermark-overlay {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 50;
+  }
+
+  .watermark-text {
+    position: absolute;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.15;
+    color: hsl(var(--foreground));
+    transform: rotate(-30deg);
+    pointer-events: none;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Secure viewer container */
+  .secure-viewer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Prevent printing */
+  @media print {
+    body * {
+      display: none !important;
+    }
+    body:before {
+      content: "Printing is not allowed";
+      font-size: 24px;
+      color: red;
+      display: block !important;
+    }
+  }
+
+  /* Disable text selection in secure areas */
+  .secure-viewer * {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+
+  .gradient-secure {
+    background: var(--gradient-secure);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-medium {
+    box-shadow: var(--shadow-medium);
+  }
+
+  .shadow-large {
+    box-shadow: var(--shadow-large);
+  }
+
+  .glass-effect {
+    backdrop-filter: blur(12px);
+    background: hsl(var(--surface-elevated) / 0.8);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+}
