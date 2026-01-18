@@ -54,7 +54,7 @@ const Auth = () => {
     if (error) {
       toast.error('Sign up failed', { description: error.message });
     } else {
-      toast.success('Account created!', { description: 'You can now sign in.' });
+      toast.success('Account created!', { description: 'Your account is pending approval. You will be able to sign in once approved by an administrator.' });
     }
     setIsLoading(false);
   };

@@ -4,6 +4,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Header } from '@/components/Header';
 import { DocumentUploadForm } from '@/components/admin/DocumentUploadForm';
 import { DocumentTable } from '@/components/admin/DocumentTable';
+import UserManagement from '@/components/admin/UserManagement';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Shield, Users, FileText } from 'lucide-react';
 
@@ -91,6 +92,9 @@ const AdminDashboard = () => {
               </CardContent>
             </Card>
           </div>
+
+          {/* User Management */}
+          <UserManagement />
 
           {/* Upload Form */}
           <DocumentUploadForm onUploadSuccess={handleRefresh} />

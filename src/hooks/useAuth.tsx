@@ -9,7 +9,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   userRole: AppRole | null;
-  profile: { email: string; full_name: string | null } | null;
+  profile: { email: string; full_name: string | null; approval_status: string } | null;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signUp: (email: string, password: string, fullName?: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState<AppRole | null>(null);
-  const [profile, setProfile] = useState<{ email: string; full_name: string | null } | null>(null);
+  const [profile, setProfile] = useState<{ email: string; full_name: string | null; approval_status: string } | null>(null);
 
   const fetchUserData = async (userId: string) => {
     try {
@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Fetch profile
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('email, full_name')
+        .select('email, full_name, approval_status')
         .eq('user_id', userId)
         .maybeSingle();
       
@@ -85,12 +85,48 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error };
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      return { error };
+    }
+
+    // Check if user is approved or is an admin
+    if (data.user) {
+      // First check if user is an admin
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', data.user.id)
+        .eq('role', 'admin')
+        .maybeSingle();
+
+      // If not an admin, check approval status
+      if (!roleData) {
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('approval_status')
+          .eq('user_id', data.user.id)
+          .maybeSingle();
+
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
+          return { error: new Error('Failed to verify account status') };
+        }
+
+        if (!profileData || profileData.approval_status !== 'approved') {
+          // Sign out the user since they're not approved
+          await supabase.auth.signOut();
+          return { error: new Error('Your account is pending approval. Please contact an administrator.') };
+        }
+      }
+    }
+
+    return { error: null };
   };
 
   const signUp = async (email: string, password: string, fullName?: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -98,7 +134,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         data: { full_name: fullName }
       }
     });
-    return { error };
+
+    if (error) {
+      return { error };
+    }
+
+    // Create profile with pending status
+    if (data.user) {
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+          user_id: data.user.id,
+          email: data.user.email!,
+          full_name: fullName || null,
+          approval_status: 'pending'
+        });
+
+      if (profileError) {
+        console.error('Error creating profile:', profileError);
+        // Don't return error here as the user account was created successfully
+        // The profile will be created when they try to sign in
+      }
+    }
+
+    return { error: null };
   };
 
   const signOut = async () => {
