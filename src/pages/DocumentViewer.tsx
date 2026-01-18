@@ -15,6 +15,7 @@ interface Document {
   description: string | null;
   page_count: number | null;
   file_path: string;
+  text_content?: string | null;
 }
 
 const DocumentViewer = () => {
@@ -137,6 +138,7 @@ const DocumentViewer = () => {
               documentId={document.id}
               title={document.title}
               pdfUrl={supabase.storage.from('documents').getPublicUrl(document.file_path).data.publicUrl}
+              textContent={document.text_content || undefined}
             />
           ) : (
             <div className="flex items-center justify-center min-h-[400px] bg-muted/30 rounded-lg border border-border">

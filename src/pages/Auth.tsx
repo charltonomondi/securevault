@@ -60,25 +60,25 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex flex-col lg:flex-row">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 gradient-primary relative overflow-hidden">
+      <div className="flex w-full lg:w-1/2 gradient-primary relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItSDI0di0yaDEyek0zNiAzMHYySCAyNHYtMmgxMnpNMzYgMjZ2LTJIMjR2MmgxMnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-50" />
         
-        <div className="relative z-10 flex flex-col justify-center px-12 text-primary-foreground">
+        <div className="relative z-10 flex flex-col justify-start lg:justify-center px-12 py-8 lg:py-0 text-primary-foreground">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
+            className="ml-4"
           >
-            <div className="flex items-center gap-4 mb-8">
-              <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-white/10 backdrop-blur">
-                <FileStack className="w-7 h-7" />
-              </div>
-              <div>
-                <h1 className="font-display text-3xl font-bold">SecureVault</h1>
-                <p className="text-primary-foreground/70">Document Repository</p>
-              </div>
+            <div className="flex flex-col items-center gap-4 mb-8">
+              <img
+                src="/src/assests/logo1.jpeg"
+                alt="Peaks Hotel Logo"
+                className="h-40 w-auto object-contain"
+              />
+              <h1 className="font-display text-3xl font-bold">Peaks Hotel</h1>
             </div>
 
             <h2 className="text-4xl font-display font-bold mb-6 leading-tight">
@@ -119,16 +119,6 @@ const Auth = () => {
           animate={{ opacity: 1, y: 0 }}
           className="w-full max-w-md"
         >
-          {/* Mobile Logo */}
-          <div className="flex items-center gap-3 mb-8 lg:hidden">
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg gradient-primary">
-              <FileStack className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="font-display font-bold text-lg">SecureVault</h1>
-              <p className="text-xs text-muted-foreground">Document Repository</p>
-            </div>
-          </div>
 
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
