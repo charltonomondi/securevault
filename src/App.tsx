@@ -18,7 +18,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename="/securevault/">
           <Routes>
             <Route path="/" element={<Documents />} />
             <Route path="/auth" element={<Auth />} />
